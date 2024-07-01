@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.add),
             iconSize: 36.0, // 修改图标大小为36.0，可以根据需要调整
             onPressed: () {
-              // 打开一个新页面或显示一个对话框来添加存储信息
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddItemPage()),
@@ -61,12 +60,12 @@ class _HomePageState extends State<HomePage> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.black, // 设置未被选中时的颜色为黑色
         onTap: _onItemTapped,
       ),
     );
   }
 }
-
 
 class MainPage extends StatelessWidget {
   @override
