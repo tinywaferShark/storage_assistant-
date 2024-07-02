@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late List<Widget> _pages;
-  String _appBarTitle = 'Home';  // 添加这个变量
+  String _appBarTitle = 'Home'; // 添加这个变量
 
   @override
   void initState() {
@@ -51,18 +51,20 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(_appBarTitle),
         centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            iconSize: 36.0,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddItemPage()),
-              );
-            },
-          ),
-        ],
+        actions: _selectedIndex == 0
+            ? <Widget>[
+                IconButton(
+                  icon: Icon(Icons.add),
+                  iconSize: 36.0,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddItemPage()),
+                    );
+                  },
+                ),
+              ]
+            : null,
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
