@@ -4,6 +4,7 @@ import 'searchpage.dart';
 import 'statspage.dart';
 import 'profilepage.dart';
 import 'additempage.dart';
+import 'add_manual_entry_page.dart';
 
 class HomePage extends StatefulWidget {
   final Function(ThemeMode) onThemeChanged;
@@ -96,7 +97,10 @@ class _HomePageState extends State<HomePage> {
                                 title: Text('手动录入'),
                                 onTap: () {
                                   Navigator.pop(context);
-                                  // 处理手动录入逻辑
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => AddManualEntryPage()),
+                                  );
                                 },
                               ),
                               SizedBox(height: 20),
