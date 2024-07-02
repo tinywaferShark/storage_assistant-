@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+  final Function(ThemeMode) onThemeChanged;
+
+  HomePage({required this.onThemeChanged});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  static List<Widget> _pages = <Widget>[
-    MainPage(),
-    SearchPage(),
-    StatsPage(),
-    ProfilePage(),
-  ];
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = <Widget>[
+      MainPage(),
+      SearchPage(),
+      StatsPage(),
+      ProfilePage(onThemeChanged: widget.onThemeChanged),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -23,21 +33,21 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('收纳助理'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            iconSize: 36.0, // 修改图标大小为36.0，可以根据需要调整
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddItemPage()),
-              );
-            },
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   // title: Text('收纳助理'),
+      //   actions: <Widget>[
+      //     IconButton(
+      //       icon: Icon(Icons.add),
+      //       iconSize: 36.0, // 修改图标大小为36.0，可以根据需要调整
+      //       onPressed: () {
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => AddItemPage()),
+      //         );
+      //       },
+      //     ),
+      //   ],
+      // ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -116,9 +126,71 @@ class StatsPage extends StatelessWidget {
 }
 
 class ProfilePage extends StatelessWidget {
+  final Function(ThemeMode) onThemeChanged;
+
+  ProfilePage({required this.onThemeChanged});
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Profile Page'));
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile Page'),
+      ),
+      body: ListView(
+        children: List.generate(10, (index) {
+          if (index == 0) {
+            return ListTile(
+              title: Text('主题'),
+              trailing: Icon(Icons.arrow_forward_ios),
+              onTap: () {
+                _showThemeDialog(context);
+              },
+            );
+          }
+          return ListTile(
+            title: Text('设置项 $index'),
+            trailing: Icon(Icons.arrow_forward_ios),
+          );
+        }),
+      ),
+    );
+  }
+
+  void _showThemeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('选择主题'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                title: Text('跟随系统'),
+                onTap: () {
+                  onThemeChanged(ThemeMode.system);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: Text('白天'),
+                onTap: () {
+                  onThemeChanged(ThemeMode.light);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: Text('黑暗'),
+                onTap: () {
+                  onThemeChanged(ThemeMode.dark);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
