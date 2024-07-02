@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late List<Widget> _pages;
+  String _appBarTitle = 'Home';  // 添加这个变量
 
   @override
   void initState() {
@@ -27,27 +28,42 @@ class _HomePageState extends State<HomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      switch (index) {
+        case 0:
+          _appBarTitle = 'Home';
+          break;
+        case 1:
+          _appBarTitle = 'Search';
+          break;
+        case 2:
+          _appBarTitle = 'Stats';
+          break;
+        case 3:
+          _appBarTitle = 'Profile';
+          break;
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   // title: Text('收纳助理'),
-      //   actions: <Widget>[
-      //     IconButton(
-      //       icon: Icon(Icons.add),
-      //       iconSize: 36.0, // 修改图标大小为36.0，可以根据需要调整
-      //       onPressed: () {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => AddItemPage()),
-      //         );
-      //       },
-      //     ),
-      //   ],
-      // ),
+      appBar: AppBar(
+        title: Text(_appBarTitle),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add),
+            iconSize: 36.0,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddItemPage()),
+              );
+            },
+          ),
+        ],
+      ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -133,9 +149,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile Page'),
-      ),
       body: ListView(
         children: List.generate(10, (index) {
           if (index == 0) {
