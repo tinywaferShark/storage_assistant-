@@ -5,33 +5,19 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.system;
-
-  void _changeTheme(ThemeMode themeMode) {
-    setState(() {
-      _themeMode = themeMode;
-    });
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '收纳助理', // 修改应用的标题为中文
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        brightness: Brightness.light,
       ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
+      home: HomePage(
+        onThemeChanged: (ThemeMode themeMode) {
+          // 这里可以根据主题变更执行操作
+        },
       ),
-      themeMode: _themeMode,
-      home: HomePage(onThemeChanged: _changeTheme),
     );
   }
 }

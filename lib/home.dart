@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'mainpage.dart';
+import 'searchpage.dart';
+import 'statspage.dart';
+import 'profilepage.dart';
+import 'additempage.dart';
 
 class HomePage extends StatefulWidget {
   final Function(ThemeMode) onThemeChanged;
@@ -12,7 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late List<Widget> _pages;
-  String _appBarTitle = 'Home'; // 添加这个变量
+  String _appBarTitle = 'Home';
 
   @override
   void initState() {
@@ -53,17 +58,17 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         actions: _selectedIndex == 0
             ? <Widget>[
-                IconButton(
-                  icon: Icon(Icons.add),
-                  iconSize: 36.0,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddItemPage()),
-                    );
-                  },
-                ),
-              ]
+          IconButton(
+            icon: Icon(Icons.add),
+            iconSize: 36.0,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddItemPage()),
+              );
+            },
+          ),
+        ]
             : null,
       ),
       body: _pages[_selectedIndex],
@@ -90,134 +95,6 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.black, // 设置未被选中时的颜色为黑色
         onTap: _onItemTapped,
-      ),
-    );
-  }
-}
-
-class MainPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GridView.builder(
-        padding: const EdgeInsets.all(10),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 1.0,
-        ),
-        itemCount: 12, // For demonstration, we'll use 12 items.
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.blue),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.image, size: 50), // Placeholder for image
-                SizedBox(height: 10),
-                Text('Item $index'), // Placeholder for title
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class SearchPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Search Page'));
-  }
-}
-
-class StatsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Stats Page'));
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  final Function(ThemeMode) onThemeChanged;
-
-  ProfilePage({required this.onThemeChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: List.generate(10, (index) {
-          if (index == 0) {
-            return ListTile(
-              title: Text('主题'),
-              trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () {
-                _showThemeDialog(context);
-              },
-            );
-          }
-          return ListTile(
-            title: Text('设置项 $index'),
-            trailing: Icon(Icons.arrow_forward_ios),
-          );
-        }),
-      ),
-    );
-  }
-
-  void _showThemeDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('选择主题'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                title: Text('跟随系统'),
-                onTap: () {
-                  onThemeChanged(ThemeMode.system);
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text('白天'),
-                onTap: () {
-                  onThemeChanged(ThemeMode.light);
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text('黑暗'),
-                onTap: () {
-                  onThemeChanged(ThemeMode.dark);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class AddItemPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('添加存储信息'),
-      ),
-      body: Center(
-        child: Text('在这里添加存储信息的表单'),
       ),
     );
   }
