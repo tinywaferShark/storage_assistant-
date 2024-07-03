@@ -19,16 +19,22 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late List<Widget> _pages;
   String _appBarTitle = 'Home';
+  List<Map<String, dynamic>> _items = []; // 保存添加的条目
 
   @override
   void initState() {
     super.initState();
     _pages = <Widget>[
-      MainPage(),
+      MainPage(items: _items,),
       SearchPage(),
       StatsPage(),
       ProfilePage(onThemeChanged: widget.onThemeChanged),
     ];
+  }
+  void _addItem(Map<String, dynamic> newItem) {
+    setState(() {
+      _items.add(newItem);
+    });
   }
 
   void _onItemTapped(int index) {
@@ -99,7 +105,9 @@ class _HomePageState extends State<HomePage> {
                                   Navigator.pop(context);
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => AddManualEntryPage()),
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            AddManualEntryPage(onAddItem: _addItem)),
                                   );
                                 },
                               ),

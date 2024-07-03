@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddManualEntryPage extends StatefulWidget {
+  final Function(Map<String, dynamic>) onAddItem;
+
+  AddManualEntryPage({required this.onAddItem});
+
   @override
   _AddManualEntryPageState createState() => _AddManualEntryPageState();
 }
@@ -14,7 +18,6 @@ class _AddManualEntryPageState extends State<AddManualEntryPage> {
   final _newTagController = TextEditingController();
   final _tags = ['Tag1', 'Tag2', 'Tag3']; // 示例标签
   final _selectedTags = <String>{};
-  String? _selectedTag;
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -32,6 +35,17 @@ class _AddManualEntryPageState extends State<AddManualEntryPage> {
         _selectedTags.add(newTag);
         _newTagController.clear();
       });
+    }
+  }
+
+  void _submit() {
+    if (_formKey.currentState!.validate()) {
+      widget.onAddItem({
+        'image': _image?.path,
+        'name': _nameController.text,
+        'tags': _selectedTags.toList(),
+      });
+      Navigator.pop(context);
     }
   }
 
@@ -101,12 +115,7 @@ class _AddManualEntryPageState extends State<AddManualEntryPage> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // 处理提交逻辑
-                    Navigator.pop(context);
-                  }
-                },
+                onPressed: _submit,
                 child: Text('提交'),
               ),
             ],

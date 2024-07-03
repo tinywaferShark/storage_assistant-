@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class MainPage extends StatelessWidget {
+  final List<Map<String, dynamic>> items;
+
+  MainPage({required this.items});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +17,7 @@ class MainPage extends StatelessWidget {
           mainAxisSpacing: 10,
           childAspectRatio: 1.0,
         ),
-        itemCount: 12, // For demonstration, we'll use 12 items.
+        itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
           return Container(
             decoration: BoxDecoration(
@@ -22,9 +27,17 @@ class MainPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.image, size: 50), // Placeholder for image
+                items[index]['image'] != null
+                    ? Image.file(File(items[index]['image']), height: 50)
+                    : Icon(Icons.image, size: 50), // Placeholder for image
                 SizedBox(height: 10),
-                Text('Item $index'), // Placeholder for title
+                Text(items[index]['name']), // Item title
+                SizedBox(height: 5),
+                Wrap(
+                  children: items[index]['tags']
+                      .map<Widget>((tag) => Chip(label: Text(tag)))
+                      .toList(),
+                ), // Item tags
               ],
             ),
           );
