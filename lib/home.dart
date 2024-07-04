@@ -7,6 +7,9 @@ import 'additempage.dart';
 import 'add_manual_entry_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; // For JSON encoding/decoding
+import 'package:path_provider/path_provider.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 class HomePage extends StatefulWidget {
   final Function(ThemeMode) onThemeChanged;
@@ -49,7 +52,40 @@ class _HomePageState extends State<HomePage> {
     String itemsString = json.encode(_items);
     await prefs.setString('items', itemsString);
   }
+  Future<void> _exportItems() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/items_backup.json');
+    final itemsString = json.encode(_items);
+    await file.writeAsString(itemsString);
 
+    // Notify the user that the export was successful
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Items exported to ${file.path}')),
+    );
+  }
+  Future<void> _importItems() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['json'],
+    );
+
+    if (result != null) {
+      final file = File(result.files.single.path!);
+      final itemsString = await file.readAsString();
+      final importedItems = List<Map<String, dynamic>>.from(json.decode(itemsString));
+
+      setState(() {
+        _items = importedItems;
+      });
+
+      _saveItems();
+
+      // Notify the user that the import was successful
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Items imported from ${file.path}')),
+      );
+    }
+  }
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
