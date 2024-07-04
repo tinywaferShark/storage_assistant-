@@ -5,11 +5,15 @@ import 'statspage.dart';
 import 'profilepage.dart';
 import 'additempage.dart';
 import 'add_manual_entry_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert'; // For JSON encoding/decoding
 
 class HomePage extends StatefulWidget {
   final Function(ThemeMode) onThemeChanged;
+  final List<Map<String, dynamic>> items;
 
-  HomePage({required this.onThemeChanged});
+  HomePage({required this.items,required this.onThemeChanged});
+  // HomePage({required this.onThemeChanged});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -19,11 +23,13 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late List<Widget> _pages;
   String _appBarTitle = 'Home';
-  List<Map<String, dynamic>> _items = []; // 保存添加的条目
+  late List<Map<String, dynamic>> _items;
+  // List<Map<String, dynamic>> _items = []; // 保存添加的条目
 
   @override
   void initState() {
     super.initState();
+    _items = widget.items; // 初始化 _items
     _pages = <Widget>[
       MainPage(items: _items,),
       SearchPage(),
@@ -35,6 +41,13 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _items.add(newItem);
     });
+    _saveItems();
+  }
+
+  void _saveItems() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String itemsString = json.encode(_items);
+    await prefs.setString('items', itemsString);
   }
 
   void _onItemTapped(int index) {
